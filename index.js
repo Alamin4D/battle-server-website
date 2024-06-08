@@ -74,11 +74,11 @@ async function run() {
     })
 
     // get a user info by email from db
-    //  app.get('/user/:email', async (req, res) => {
-    //   const email = req.params.email
-    //   const result = await usersCollection.findOne({ email })
-    //   res.send(result)
-    // })
+     app.get('/user/:email', async (req, res) => {
+      const email = req.params.email
+      const result = await usersCollection.findOne({ email })
+      res.send(result)
+    })
 
     app.get('/scholarships', async (req, res) => {
       const result = await scholarshipsCollection.find().toArray()
