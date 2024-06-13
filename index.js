@@ -9,12 +9,8 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const port = process.env.PORT || 5000
 
 // middleware
-const corsOptions = {
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'https://6669d89c3bf1500422f2b447--scintillating-rabanadas-b8327e.netlify.app'],
-  credentials: true,
-  optionSuccessStatus: 200,
-}
-app.use(cors(corsOptions))
+
+app.use(cors())
 
 app.use(express.json())
 
@@ -176,6 +172,14 @@ async function run() {
       res.send(result)
     })
 
+    app.delete('/scholarship/:id', async (req, res) => {
+      const id = req.params.id
+      const query = { _id: new ObjectId(id) }
+      console.log(id)
+      const result = await scholarshipsCollection.deleteOne(query)
+      res.send(result)
+    })
+
     // get all applier for moderator
     app.get('/all-applied/:email', async (req, res) => {
       const email = req.params.email
@@ -190,7 +194,7 @@ async function run() {
     app.delete('/all-applied/:id', async (req, res) => {
       const id = req.params.id
       const query = { _id: new ObjectId(id) }
-      const result = await scholarshipsCollection.deleteOne(query)
+      const result = await appliedCollection.deleteOne(query)
       res.send(result)
     })
 
@@ -212,6 +216,7 @@ async function run() {
     app.put('/review/update/:id', verifyToken, async (req, res) => {
       const id = req.params.id
       const reviewData = req.body
+      console.log(reviewData)
       const query = { _id: new ObjectId(id) }
       const updateDoc = {
         $set: reviewData,
